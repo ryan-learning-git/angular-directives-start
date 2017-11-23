@@ -2,7 +2,7 @@ import {
     Directive,
     ElementRef,
     HostBinding,
-    HostListener,
+    HostListener, Input,
     OnInit,
     Renderer2
 } from '@angular/core';
@@ -12,7 +12,10 @@ import {
 })
 export class BetterHighlightDirective implements OnInit {
 
-    @HostBinding('style.backgroundColor') backgroundColor: string = 'transparent';
+    @Input() defaultColor: string = '#FFFFFF';
+    @Input() highlightColor: string = '#000099';
+
+    @HostBinding('style.backgroundColor') backgroundColor: string = this.defaultColor;
 
     elementRef: ElementRef;
     renderer: Renderer2;
@@ -23,17 +26,18 @@ export class BetterHighlightDirective implements OnInit {
     }
 
     ngOnInit(): void {
-        this.renderer.setStyle(this.elementRef.nativeElement, 'background-color', '#336699'); // could add flags such as important
+        this.backgroundColor = this.defaultColor
+        // this.renderer.setStyle(this.elementRef.nativeElement, 'background-color', '#336699'); // could add flags such as important
     }
 
     @HostListener('mouseenter') mouseOver(eventData: Event){
         // this.renderer.setStyle(this.elementRef.nativeElement, 'background-color', '#990000'); // could add flags such as important
-        this.backgroundColor = '#FF9900';
+        this.backgroundColor = this.highlightColor;
     }
 
     @HostListener('mouseleave') mouseLeave(eventData: Event){
         // this.renderer.setStyle(this.elementRef.nativeElement, 'background-color', '#009900'); // could add flags such as important
-        this.backgroundColor = '#FF00FF';
+        this.backgroundColor = this.defaultColor;
     }
 
 }
